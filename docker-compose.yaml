@@ -1,0 +1,32 @@
+---
+version: "3.8"
+services:
+  nopdb:
+      image: mysql:8
+      environment:
+        - MYSQL_ROOT_PASSWORD=nop123
+        - MYSQL_DATABASE=nop
+        - MYSQL_USER=nop
+        - MYSQL_PASSWORD=nop123
+      container_name: nopdb
+      ports:
+        - 3306
+      networks:
+        - nop-net
+      volumes: 
+        - nop-vol:/var/lib/mysql
+  nop:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - 32000:5000
+      networks: 
+        - nop-net
+      container_name: "nop"
+      depends_on:
+        - nopdb
+networks:
+  nop-net:
+volumes:
+  nop-vol:
